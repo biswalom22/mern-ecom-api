@@ -42,7 +42,9 @@ export const createProduct = [
 
       // Validate numeric fields
       if (isNaN(price) || isNaN(stock)) {
-        return res.status(400).json({ error: "Price and stock must be numbers" });
+        return res
+          .status(400)
+          .json({ error: "Price and stock must be numbers" });
       }
 
       // Validate required fields
@@ -201,5 +203,64 @@ export const deleteProduct = async (req: any, res: any) => {
     res.status(200).json({ message: "Product deleted successfully." });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCategories = async (req: any, res: any) => {
+  try {
+    const categories = await ProductModel.distinct("category");
+    res.status(200).json(categories);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getColors = async (req: any, res: any) => {
+  try {
+    const colors = await ProductModel.distinct("color");
+    res.status(200).json(colors);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getBrands = async (req: any, res: any) => {
+  try {
+    const brands = await ProductModel.distinct("brand");
+    res.status(200).json(brands);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getFilteredProducts = async (req: any, res: any) => {
+  try {
+    const { category, color, brand, limit, page } = req.query;
+
+    const filters: any = {};
+    if (category) filters.category = category;
+    if (color) filters.color = color;
+    if (brand) filters.brand = brand;
+
+    const parsedLimit = parseInt(limit as string, 10) || 10;
+    const parsedPage = parseInt(page as string, 10) || 1;
+
+    const skip = (parsedPage - 1) * parsedLimit;
+
+    const products = await ProductModel.find(filters)
+      .skip(skip)
+      .limit(parsedLimit);
+
+    const total = await ProductModel.countDocuments(filters);
+
+    res.status(200).json({
+      products,
+      total,
+      page: parsedPage,
+      totalPages: Math.ceil(total / parsedLimit),
+    });
+  } catch (error: any) {
+    console.error("Error fetching filtered products:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

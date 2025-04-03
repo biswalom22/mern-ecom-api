@@ -5,11 +5,23 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
+  getCategories,
+  getColors,
+  getBrands,
+  getFilteredProducts,
 } from '../controllers/productController';
 
 const router = express.Router();
 
 router.post('/products', createProduct);
+
+router.get('/products/categories', getCategories);
+
+router.get('/products/colors', getColors);
+
+router.get('/products/brands', getBrands);
+
+router.get('/products', getFilteredProducts);
 
 router.get('/products', getProducts);
 
