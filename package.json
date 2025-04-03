@@ -5,6 +5,8 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "ngrok": "ngrok http 4000",
+    "lint": "eslint 'src/**/*.{js,ts}' --fix",
+    "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
     "build": "tsc"
   },
   "keywords": [],
@@ -36,6 +38,12 @@
     "@types/multer": "^1.4.12",
     "@types/node": "^22.13.10",
     "@types/stripe": "^8.0.416",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   }
